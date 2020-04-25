@@ -106,7 +106,7 @@ text-align: center;
 h2 {
     display: inline-block;
     margin: 0 15px;
-    font-size: medium;
+    font-size: larger;
     font-weight: 700;
 }
 
@@ -114,4 +114,15 @@ p {
     display: inline-block;
     font-size: medium;
     color: #dae1e7;
+}
+
+h3 {
+    display: inline-block;
+    margin-left: auto;
+    padding-right: 10px;
+}
+
+.msg {
+    display: flex;
+    align-items: center;
 }
