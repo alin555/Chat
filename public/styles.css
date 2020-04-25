@@ -1,0 +1,117 @@
+html {
+    height: 100%;
+    width: 100%;
+    display: flex;
+}
+body {
+    /* filter: blur(10px); */
+    height: 100%;
+    width: 100%;
+    margin: 0;
+    align-items: center;
+    justify-content: center;
+    display: flex;
+    background: linear-gradient(to right, #6994c0 50%, #00909e);
+}
+#chat-container {
+    height: 95%;
+    width: 95%;
+    /* margin-left: 2.5%; */
+    /* margin-top: 1.2%; */
+    border-radius: 25px;
+    /* padding-top: 1%; */
+    /* justify-content: space-between; */
+    /* align-content: space-between; */
+    align-items: center;
+    display: flex;
+    flex-direction: column;
+    background-color: #142850;
+    filter: blur(10px);
+}
+
+#login-container {
+    position: absolute;
+    /* z-index: 2; */
+    /* left: -50%; */
+    height: 36%;
+    display: flex;
+    justify-content: center;
+    width: 37%;
+    align-items: center;
+    background-color: #dae1e7;
+    text-align: center;
+    border-radius: 25px;
+}
+
+#text-container {
+    text-align: left;
+    background-color: #dae1e7;
+    height: 6%;
+    width: 95%;
+    /* display: inline-block; */
+    position: relative;
+    top: 54px;
+    border-radius: 25px;
+    display: flex;
+    align-items: center;
+
+}
+
+#chat-log {
+    height: 83%;
+    width: 95%;
+    border-radius: 25px;
+    /* margin: 10px auto; */
+    position: relative;
+    top: 25px;
+    /* justify-self: self-start; */
+    background-color: #27496d;
+}
+
+#login-chat {
+    margin: 16%;
+    height: 30px;
+    width: 70px;
+    border-radius: 25px;
+    font-weight: 900;
+}
+
+#user-text {
+    margin: auto 25px;
+    /* text-align: center; */
+}
+
+#user-text::placeholder {
+    margin: auto 25px;
+    /* text-align: center; */
+}
+
+input[type="text"]::placeholder {  
+                  
+text-align: center;
+}
+
+#send {
+    font-weight: 900;
+    border-radius: 5px;
+    background-color: #222831;
+    color: #dae1e7;
+    margin: auto;
+}
+
+#user-text {
+    width: 80%;
+}
+
+h2 {
+    display: inline-block;
+    margin: 0 15px;
+    font-size: medium;
+    font-weight: 700;
+}
+
+p {
+    display: inline-block;
+    font-size: medium;
+    color: #dae1e7;
+}
