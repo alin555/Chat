@@ -7,20 +7,13 @@ $("#user-text").keypress(function(e){
     }
 });
 
-$("#login-chat").click(function () {
-    const name = $("#name").val();
-    $.get(apiUrl + "login?name=" + name, function (data) {
-        localStorage.setItem("id", data);
-        $("#login-container").css("display", "none");
-        $("#chat-container").css("filter", "none");
-    });
+$("#name").keypress(function(e){
+    if (e.which == 13) {
+        login();
+    }
 });
 
-// $("#send").click(function () {
-//     const userId = localStorage.getItem("id");
-//     const msg = $("#user-text").val();
-//     $.get(apiUrl + "sendMsg?userId=" + userId + "&msg=" + msg, function (data) {});
-// });
+$("#login-chat").click(login);
 
 $("#send").click(send);
 
@@ -64,10 +57,17 @@ function checkTime(x) {
 }
 
 function send() {
-    
         const userId = localStorage.getItem("id");
         const msg = $("#user-text").val();
         $.get(apiUrl + "sendMsg?userId=" + userId + "&msg=" + msg, function (data) {});
         $("#user-text").val("");
-    
+}
+
+function login() {
+        const name = $("#name").val();
+        $.get(apiUrl + "login?name=" + name, function (data) {
+            localStorage.setItem("id", data);
+            $("#login-container").css("display", "none");
+            $("#chat-container").css("filter", "none");
+        });
 }
