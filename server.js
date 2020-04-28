@@ -49,7 +49,7 @@ app.get("/sendMsg", function (req, res) {
 
     User.findOne({
         _id: userId
-    }, function (err, foundUser) {        
+    }, function (err, foundUser) {
         const newLog = new Log({
             user: foundUser,
             text: msg,
@@ -60,17 +60,36 @@ app.get("/sendMsg", function (req, res) {
     res.send();
 });
 
-app.get("/getChatMsgs", function (req,res) {
+app.get("/getChatMsgs", function (req, res) {
 
     const date = new Date(req.query.date);
 
-    Log.find({date: {$gte: date}}, function(err, foundLog) {
+    Log.find({
+        date: {
+            $gte: date
+        }
+    }, function (err, foundLog) {
         if (foundLog) {
             res.send(foundLog);
         }
-        
     });
 });
+
+///////////////////////   Delete old logs
+
+setInterval(function () {
+    const date = new Date();
+
+    Log.find({}, function (err, foundLog) {
+        foundLog.forEach(function (log) {
+            if ((date - log.date) > 1800000) {
+                log.remove();
+            }
+        });
+
+    });
+}, 10000);
+
 
 app.listen("3000", function () {
     console.log("server started on port 3000");

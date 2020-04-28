@@ -33,6 +33,7 @@ body {
     background-color: #dae1e7;
     text-align: center;
     border-radius: 25px;
+    border: solid 2px;
 }
 
 #text-container {
@@ -45,8 +46,15 @@ body {
     border-radius: 25px;
     display: flex;
     align-items: center;
-
 }
+
+/* #textarea {
+    height: 100%;
+    width: 100%;
+    padding: 0;
+    border-radius: 25px;
+    background-color: #27496d;
+} */
 
 #chat-log {
     height: 83%;
@@ -55,6 +63,7 @@ body {
     position: relative;
     top: 25px;
     background-color: #27496d;
+    overflow: auto;
 }
 
 #login-chat {

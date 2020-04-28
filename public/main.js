@@ -1,5 +1,7 @@
 const apiUrl = window.location.href;
 var date = new Date().toJSON();
+var chatLog = document.getElementById("chat-log");
+
 
 $("#user-text").keypress(function(e){
     if (e.which == 13) {
@@ -16,6 +18,7 @@ $("#name").keypress(function(e){
 $("#login-chat").click(login);
 
 $("#send").click(send);
+
 
 setInterval(function () {
 
@@ -40,6 +43,7 @@ setInterval(function () {
             newMsgContainer.appendChild(newMsg);
             newMsgContainer.appendChild(time);
             $("#chat-log").append(newMsgContainer);
+            chatLog.scrollTop = chatLog.scrollHeight - chatLog.clientHeight;
         });
 
 
@@ -48,6 +52,7 @@ setInterval(function () {
     });
 
 }, 1000);
+
 
 function checkTime(x) {
     if (x < 10) {
@@ -61,6 +66,8 @@ function send() {
         const msg = $("#user-text").val();
         $.get(apiUrl + "sendMsg?userId=" + userId + "&msg=" + msg, function (data) {});
         $("#user-text").val("");
+        $("#user-text").focus();
+
 }
 
 function login() {
