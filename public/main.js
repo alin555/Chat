@@ -19,6 +19,21 @@ $("#login-chat").click(login);
 
 $("#send").click(send);
 
+setInterval(function() {
+    $("#online").html("");
+    $.get(apiUrl+"onlineUsers", function(data) {
+        data.forEach(function(user) {
+            var onlineUserDiv = document.createElement("div");
+            var onlineUser = document.createElement("h2");
+            onlineUser.innerHTML = user.name;
+            onlineUserDiv.appendChild(onlineUser);
+            $("#online").append(onlineUserDiv);
+        });
+
+    });
+}, 5000);
+
+
 
 setInterval(function () {
 
@@ -45,8 +60,6 @@ setInterval(function () {
             $("#chat-log").append(newMsgContainer);
             chatLog.scrollTop = chatLog.scrollHeight - chatLog.clientHeight;
         });
-
-
 
         date = new Date().toJSON();
     });
@@ -75,6 +88,6 @@ function login() {
         $.get(apiUrl + "login?name=" + name, function (data) {
             localStorage.setItem("id", data);
             $("#login-container").css("display", "none");
-            $("#chat-container").css("filter", "none");
+            $("#page").css("filter", "none");
         });
 }

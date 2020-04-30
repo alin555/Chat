@@ -15,7 +15,8 @@ mongoose.connect("mongodb://localhost:27017/chatDB", {
 });
 
 const userScheme = new mongoose.Schema({
-    name: String
+    name: String,
+    date: Date
 });
 
 const logScheme = new mongoose.Schema({
@@ -34,8 +35,10 @@ app.get("/", function (req, res) {
 
 app.get("/login", function (req, res) {
     const name = req.query.name;
+    const date = new Date();
     const newUser = new User({
-        name: name
+        name: name,
+        date: date
     });
     newUser.save(function (err, user) {
         res.send(user.id);
@@ -75,15 +78,24 @@ app.get("/getChatMsgs", function (req, res) {
     });
 });
 
+app.get("/onlineUsers", function(req,res) {
+    const date = new Date();
+    User.find({}, function(err,foundUser) {
+        res.send(foundUser);
+    });
+});
+
 ///////////////////////   Delete old logs
 
 setInterval(function () {
     const date = new Date();
 
-    Log.find({}, function (err, foundLog) {
-        foundLog.forEach(function (log) {
-            if ((date - log.date) > 1800000) {
-                log.remove();
+    User.find({}, function (err, foundUser) {
+        
+        foundUser.forEach(function (user) {
+            
+            if ((date - user.date) > 86400000) {
+                user.remove();
             }
         });
 

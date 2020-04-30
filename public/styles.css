@@ -8,19 +8,28 @@ body {
     width: 100%;
     margin: 0;
     align-items: center;
-    justify-content: center;
-    display: flex;
+    justify-content: space-around;
+    display: flex; 
     background: linear-gradient(to right, #6994c0 50%, #00909e);
 }
 #chat-container {
     height: 95%;
-    width: 95%;
+    width: 75%;
     border-radius: 25px;
     align-items: center;
     display: flex;
     flex-direction: column;
     background-color: #142850;
+
+}
+
+#page {
     filter: blur(10px);
+    height: 100%;
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: space-around;
 }
 
 #login-container {
@@ -34,6 +43,39 @@ body {
     text-align: center;
     border-radius: 25px;
     border: solid 2px;
+}
+
+#small-container {
+    height: 95%;
+    width: 20%;
+    background-color: #142850;
+    border-radius: 25px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+    align-items: center;
+}
+
+#online {
+    height: 30%;
+    width: 90%;
+    background-color: #27496d;
+    overflow: auto;
+    border-radius: 25px;
+}
+
+#rooms {
+    height: 47%;
+    width: 90%;
+    background-color: #27496d;
+    overflow: auto;
+    border-radius: 25px;
+    margin-bottom: 3px;
+}
+
+.onlineAndRooms {
+    font-size: 22px;
+    color: #dae1e7;
 }
 
 #text-container {
