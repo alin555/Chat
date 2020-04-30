@@ -9,7 +9,7 @@ app.use(bodyParser.urlencoded({
 }));
 app.use(express.static("public"));
 
-mongoose.connect("mongodb://localhost:27017/chatDB", {
+mongoose.connect("mongodb+srv://alinz:201121480@cluster0-q31x3.mongodb.net/chatDB", {
     useNewUrlParser: true,
     useUnifiedTopology: true
 });
