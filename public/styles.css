@@ -90,16 +90,17 @@ body {
     font-size: 22px;
     color: #dae1e7;
     margin-top: 1px 0px;
+    font-family: 'Raleway', sans-serif;
 }
 
 #new-room-container {
     display: none;
-    width: 18%;
     justify-content: center;
     align-items: center;
     flex-direction: column;
-    position: absolute;
+    position: relative;
     z-index: 1;
+    top: 6px;
 }
 
 #new-room {
@@ -122,6 +123,7 @@ body {
     background-color: #222831;
     color: #dae1e7;
     margin-top: 6px;
+    font-family: 'Josefin Sans', sans-serif;
 }
 
 #text-container {
@@ -156,6 +158,7 @@ body {
 
 #roomName {
     color: #dae1e7;
+    font-family: 'Raleway', sans-serif;
 }
 
 #login-chat {
@@ -186,6 +189,9 @@ text-align: center;
     background-color: #222831;
     color: #dae1e7;
     margin: auto;
+    font-family: 'Josefin Sans', sans-serif;
+    height: 60%;
+    width: 10%;
 }
 
 #user-text {
@@ -194,16 +200,18 @@ text-align: center;
 
 h2 {
     display: inline-block;
-    margin: 0 15px;
+    margin: 2px 15px 0;
     font-size: larger;
     font-weight: 700;
+    font-family: 'Josefin Sans', sans-serif;
 }
 
 h4 {
     display: block;
-    margin: 0 15px;
+    margin: 2px 15px 0;
     font-size: larger;
     font-weight: 700;
+    font-family: 'Josefin Sans', sans-serif;
 }
 
 p {
