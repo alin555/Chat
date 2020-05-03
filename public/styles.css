@@ -73,9 +73,55 @@ body {
     margin-bottom: 3px;
 }
 
+#private-room {
+    height: 20%;
+    width: 90%;
+    background-color: #27496d;
+    overflow: auto;
+    border-radius: 25px;
+    margin-bottom: 8px;
+    /* display: flex; */
+    /* align-items: flex-end; */
+    /* text-align: center;
+    justify-content: center; */
+}
+
 .onlineAndRooms {
     font-size: 22px;
     color: #dae1e7;
+    margin-top: 1px 0px;
+}
+
+#new-room-container {
+    display: none;
+    width: 18%;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    position: absolute;
+    z-index: 1;
+}
+
+#new-room {
+    font-size: 16px;
+    font-weight: 700;
+    border: #222831 25p;
+    border-radius: 25px;
+    background-color: #222831;
+    padding-left: 6;
+    color: #dae1e7;
+}
+
+#new-room-name {
+    width: 50%;
+}
+
+#create-room {
+    font-weight: 900;
+    border-radius: 5px;
+    background-color: #222831;
+    color: #dae1e7;
+    margin-top: 6px;
 }
 
 #text-container {
@@ -99,13 +145,17 @@ body {
 } */
 
 #chat-log {
-    height: 83%;
+    height: 73%;
     width: 95%;
     border-radius: 25px;
     position: relative;
     top: 25px;
     background-color: #27496d;
     overflow: auto;
+}
+
+#roomName {
+    color: #dae1e7;
 }
 
 #login-chat {
@@ -144,6 +194,13 @@ text-align: center;
 
 h2 {
     display: inline-block;
+    margin: 0 15px;
+    font-size: larger;
+    font-weight: 700;
+}
+
+h4 {
+    display: block;
     margin: 0 15px;
     font-size: larger;
     font-weight: 700;

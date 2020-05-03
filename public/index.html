@@ -13,11 +13,28 @@
             <label for="online" class="onlineAndRooms">Online Users</label>
             <div id="online"></div>
             <label for="rooms" class="onlineAndRooms">Rooms</label>
-            <div id="rooms"></div>
+            <div id="rooms">
+                <h4 id="lobby" onclick="changeRoom('lobby')">Lobby</h4>
+                <h4 id="sex" onclick="changeRoom('sex')">Sex</h4>
+                <h4 id="gaming" onclick="changeRoom('gaming')">Gaming</h4>
+            </div>
+            <div id="create-room-container">
+                <label for="private-room" class="onlineAndRooms">Private Rooms</label>
+                <button id="new-room">+</button>
+            </div>
+
+
+            <div id="private-room">
+                <div id="new-room-container">
+                    <input type="text" id="new-room-name">
+                    <button id="create-room">Create</button>
+                </div>
+            </div>
         </div>
         <div id="chat-container">
+            <h1 id="roomName">Lobby</h1>
             <div id="chat-log">
-    
+ 
             </div>
             <div id="text-container">
                 <input type="text" id="user-text">

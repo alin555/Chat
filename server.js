@@ -11,18 +11,21 @@ app.use(express.static("public"));
 
 mongoose.connect("mongodb+srv://alinz:201121480@cluster0-q31x3.mongodb.net/chatDB", {
     useNewUrlParser: true,
-    useUnifiedTopology: true
+    useUnifiedTopology: true,
+    useFindAndModify: false
 });
 
 const userScheme = new mongoose.Schema({
     name: String,
-    date: Date
+    date: Date,
+    room: String
 });
 
 const logScheme = new mongoose.Schema({
     user: [userScheme],
     text: String,
-    date: Date
+    date: Date,
+    room: String
 });
 
 const User = new mongoose.model("User", userScheme);
@@ -38,7 +41,8 @@ app.get("/login", function (req, res) {
     const date = new Date();
     const newUser = new User({
         name: name,
-        date: date
+        date: date,
+        room: "Lobby"
     });
     newUser.save(function (err, user) {
         res.send(user.id);
@@ -56,7 +60,8 @@ app.get("/sendMsg", function (req, res) {
         const newLog = new Log({
             user: foundUser,
             text: msg,
-            date: date
+            date: date,
+            room: foundUser.room
         });
         newLog.save();
     });
@@ -66,34 +71,54 @@ app.get("/sendMsg", function (req, res) {
 app.get("/getChatMsgs", function (req, res) {
 
     const date = new Date(req.query.date);
+    const room = req.query.room;
+
 
     Log.find({
         date: {
-            $gte: date
-        }
+            $gt: date
+        },
+        room: room
     }, function (err, foundLog) {
+
         if (foundLog) {
             res.send(foundLog);
         }
     });
 });
 
-app.get("/onlineUsers", function(req,res) {
+app.get("/onlineUsers", function (req, res) {
     const date = new Date();
-    User.find({}, function(err,foundUser) {
+    User.find({}, function (err, foundUser) {
         res.send(foundUser);
     });
 });
 
-///////////////////////   Delete old logs
+app.get("/changeRoom", function (req, res) {
+    room = req.query.room;
+    userId = req.query.userId;
+    User.findOneAndUpdate({
+        _id: userId
+    }, {room: room},
+    function (err, results) {
+        
+    });
+});
+
+// app.get("/newRoom", function(req,res) {
+//     const roomName = req.query.roomName;
+
+// });
+
+///////////////////////   Delete old users
 
 setInterval(function () {
     const date = new Date();
 
     User.find({}, function (err, foundUser) {
-        
+
         foundUser.forEach(function (user) {
-            
+
             if ((date - user.date) > 86400000) {
                 user.remove();
             }
@@ -103,8 +128,8 @@ setInterval(function () {
 }, 10000);
 
 let port = process.env.PORT;
-if (port== null || port == "") {
-    port=3000;
+if (port == null || port == "") {
+    port = 3000;
 }
 
 app.listen(port, function () {
