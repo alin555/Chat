@@ -13,7 +13,7 @@
     <div id="page">
         <div id="small-container">
             <label for="online" class="onlineAndRooms">Online Users</label>
-            <div id="online" name="hey"></div>
+            <div id="online"></div>
             <label for="rooms" class="onlineAndRooms">Rooms</label>
             <div id="rooms">
                 <h4 id="lobby" onclick="changeRoom('Lobby')">Lobby</h4>
@@ -37,15 +37,18 @@
             </div>
         </div>
         <div id="chat-container">
-            <h1 id="roomName">Lobby</h1>
+            <div id="title">
+                <h1 id="roomName">Lobby</h1>
+
+            </div>
             <div id="chat-log">
- 
+
             </div>
             <div id="text-container">
                 <input type="text" id="user-text">
                 <button id="send">Send</button>
             </div>
-    
+
         </div>
     </div>
 

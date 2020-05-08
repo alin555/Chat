@@ -220,9 +220,7 @@ setInterval(function () {
 
         var exist = false;
 
-        foundRoom.forEach(room => {
-            console.log(room.name);
-            
+        foundRoom.forEach(room => {            
             
             User.findOne({room: room.name}, function (err, foundUser) {
 
