@@ -51,12 +51,15 @@ const Room = new mongoose.model("Room", roomSchema);
 //     password: "",
 //     main: true
 // });
+
 // lobby.save();
+
 // const sex = new Room({
 //     name: "Sex",
 //     password: "",
 //     main: true
 // });
+
 // sex.save();
 
 // const gaming = new Room({
@@ -64,6 +67,7 @@ const Room = new mongoose.model("Room", roomSchema);
 //     password: "",
 //     main: true
 // });
+
 // gaming.save();
 
 app.get("/", function (req, res) {
@@ -119,7 +123,9 @@ app.get("/getChatMsgs", function (req, res) {
             results.log = foundLog;
         }
 
-        Room.find({main: false}, function (err, foundRoom) {
+        Room.find({
+            main: false
+        }, function (err, foundRoom) {
             results.room = foundRoom;
             res.send(results);
         });
@@ -131,12 +137,11 @@ app.get("/onlineUsers", function (req, res) {
     const id = req.query.userId;
 
     User.findOneAndUpdate({
-        _id: id
-    }, {
-        lastActive: date
-    },
-    function (err, results) {
-    });
+            _id: id
+        }, {
+            lastActive: date
+        },
+        function (err, results) {});
 
     User.find({}, function (err, foundUser) {
         res.send(foundUser);
@@ -150,7 +155,7 @@ app.get("/changeRoom", function (req, res) {
 
     Room.findOne({
         name: room
-    }, function (err, foundRoom) {
+    }, function (err, foundRoom) {        
 
         if (password == foundRoom.password) {
 
@@ -196,7 +201,7 @@ app.get("/createRoom", function (req, res) {
     });
 });
 
-///////////////////////   Delete old users
+///////////////////////   Delete inactive users&rooms ////////////////
 
 setInterval(function () {
     const date = new Date();
@@ -209,12 +214,29 @@ setInterval(function () {
                 user.remove();
             }
         });
-
     });
 
-    // Room.find({}, function(err, foundRoom) {
-    //     User.find({})
-    // });
+    Room.find({main: false}, function (err, foundRoom) {
+
+        var exist = false;
+
+        foundRoom.forEach(room => {
+            console.log(room.name);
+            
+            
+            User.findOne({room: room.name}, function (err, foundUser) {
+
+                if(!foundUser) {
+                    room.remove();
+                }
+
+            });
+
+        });
+
+
+
+    });
 }, 10000);
 
 let port = process.env.PORT;

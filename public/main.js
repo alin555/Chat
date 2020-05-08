@@ -34,7 +34,6 @@ $("#create-room").click(function () {
         changeRoom(room, password);
         $("#new-room-container").css("display", "none");
         $(".privateRooms").css("display", "inline-block");
-        $("#private-room").append(newRoomContainer);
         $("#new-room-name").val("");
         $("#password").val("");
     });
@@ -122,7 +121,9 @@ setInterval(function () {
         }
 
         data.room.forEach(function (room) {
+
             if ($("[name=" + room.name + "]").length == 0) {
+
                 var newRoomContainer = document.createElement("div");
                 var newRoomName = document.createElement("h2");
                 newRoomContainer.classList.add("privateRoomContainer");
@@ -133,9 +134,24 @@ setInterval(function () {
                 newRoomContainer.appendChild(newRoomName);
                 $("#private-room").append(newRoomContainer);
             }
-
         });
 
+        var oldRooms = document.getElementsByClassName("privateRoomContainer");
+
+        for (let i = 0; i < oldRooms.length; i++) {
+
+            var exist = false;
+
+            data.room.forEach(newRoom => {
+                if (oldRooms[i].getAttribute("name") == newRoom.name) {
+                    exist = true;
+                }
+            });
+
+            if (!exist) {
+                oldRooms[i].remove();
+            }
+        }
     });
 
 }, 1000);
@@ -183,7 +199,6 @@ function login() {
 }
 
 function enterPrivate() {
-    // id = this.name;
     name = $(this).attr("name");
 
     $("#password-check").focus()
