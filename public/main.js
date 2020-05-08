@@ -27,62 +27,31 @@ $("#new-room").click(function () {
     $("#new-room-container").css("display", "flex");
 });
 
-// function yoyo(id, name) {
-//     id = id;
-//     name = name;
-// }
-
-// $("#confirm").click(function () {
-//     const id = id;
-//     const name = name;
-// });
-
 $("#create-room").click(function () {
     const room = $("#new-room-name").val();
     const password = $("#password").val();
-    // changeRoom(room);
-    $("#new-room-container").css("display", "none");
-    $(".privateRooms").css("display", "inline-block");
-    var newRoomContainer = document.createElement("div");
-    var newRoomName = document.createElement("h2");
-    newRoomContainer.classList.add("privateRoomContainer");
-    newRoomContainer.setAttribute("id", password);
-    newRoomContainer.addEventListener("click", enterPrivate);
-    newRoomContainer.setAttribute("name", room);
-    newRoomName.classList.add("privateRooms");
-    newRoomName.innerHTML = room;
-    newRoomContainer.appendChild(newRoomName);
-    $("#private-room").append(newRoomContainer);
-    $("#new-room-name").val("");
-    $("#password").val("");
+    $.get(apiUrl + "createRoom?room=" + room + "&password=" + password, function (data) {
+        changeRoom(room, password);
+        $("#new-room-container").css("display", "none");
+        $(".privateRooms").css("display", "inline-block");
+        $("#private-room").append(newRoomContainer);
+        $("#new-room-name").val("");
+        $("#password").val("");
+    });
+
 });
 
-document.getElementById("confirm").addEventListener("click", function () {
-    console.log("1");
-    console.log("2");
-
-
-    if (id === $("#password-check").val()) {
-        $("#check-password-container").css("display", "none");
-        $(".privateRooms").css("display", "inline-block");
-        // $("#password-check").val("")
-        // $("#confirm").off("click");
-
-        changeRoom(name);
-
-    } else {
-        // $("#confirm").off("click");
-
-        changeRoom("Lobby");
-        $("#check-password-container").css("display", "none");
-        $(".privateRooms").css("display", "inline-block");
-        // $("#password-check").val("")
-    }
-
+$("#confirm").click(function () {
+    const password = $("#password-check").val();
+    $("#check-password-container").css("display", "none");
+    $(".privateRooms").css("display", "inline-block");
+    changeRoom(name, password);
 });
 
 setInterval(function () {
-    $.get(apiUrl + "onlineUsers", function (data) {
+    const userId = localStorage.getItem("id");
+
+    $.get(apiUrl + "onlineUsers?userId=" + userId, function (data) {
 
         var oldUsers = $(".currentUsers").toArray();
 
@@ -126,8 +95,7 @@ setInterval(function () {
 
     $.get(apiUrl + "getChatMsgs?date=" + date + "&room=" + room, function (data) {
 
-
-        data.forEach(function (msg) {
+        data.log.forEach(function (msg) {
             const today = new Date();
             const h = today.getHours();
             var m = today.getMinutes();
@@ -148,21 +116,31 @@ setInterval(function () {
             $("#chat-log").append(newMsgContainer);
             chatLog.scrollTop = chatLog.scrollHeight - chatLog.clientHeight;
         });
-        if (data.length > 0) {
-            console.log(data[data.length - 1]);
+        if (data.log.length > 0) {
 
-            date = data[data.length - 1].date;
+            date = data.log[data.log.length - 1].date;
         }
+
+        data.room.forEach(function (room) {
+            if ($("[name=" + room.name + "]").length == 0) {
+                var newRoomContainer = document.createElement("div");
+                var newRoomName = document.createElement("h2");
+                newRoomContainer.classList.add("privateRoomContainer");
+                newRoomContainer.addEventListener("click", enterPrivate);
+                newRoomContainer.setAttribute("name", room.name);
+                newRoomName.classList.add("privateRooms");
+                newRoomName.innerHTML = room.name;
+                newRoomContainer.appendChild(newRoomName);
+                $("#private-room").append(newRoomContainer);
+            }
+
+        });
 
     });
 
 }, 1000);
 
-function changeRoom(newRoom) {
-    // console.log(newRoom);
-
-
-
+function changeRoom(newRoom, password = "") {
     room = newRoom;
 
     const userId = localStorage.getItem("id");
@@ -170,9 +148,11 @@ function changeRoom(newRoom) {
 
     $("#roomName").html(room.charAt(0).toUpperCase() + room.slice(1));
 
-    $.get(apiUrl + "changeRoom?room=" + newRoom + "&userId=" + userId, function (data) {
-        console.log(data);
+    $.get(apiUrl + "changeRoom?room=" + newRoom + "&userId=" + userId + "&password=" + password, function (data) {
+        if (data == "0") {
 
+            changeRoom("Lobby");
+        }
     });
 }
 
@@ -203,35 +183,11 @@ function login() {
 }
 
 function enterPrivate() {
-    id = this.id;
+    // id = this.name;
     name = $(this).attr("name");
-    
+
     $("#password-check").focus()
 
     $(".privateRooms").css("display", "none");
     $("#check-password-container").css("display", "flex");
-
-    // document.getElementById("confirm").addEventListener("click", function () {
-    //     console.log("1");
-    //     console.log("2");
-
-
-    //     if (id === $("#password-check").val()) {
-    //         $("#check-password-container").css("display", "none");
-    //         $(".privateRooms").css("display", "inline-block");
-    //         // $("#password-check").val("")
-    //         // $("#confirm").off("click");
-
-    //         changeRoom(name);
-
-    //     } else {
-    //         // $("#confirm").off("click");
-
-    //         changeRoom("Lobby");
-    //         $("#check-password-container").css("display", "none");
-    //         $(".privateRooms").css("display", "inline-block");
-    //         // $("#password-check").val("")
-    //     }
-
-    // });
 };

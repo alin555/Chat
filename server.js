@@ -1,6 +1,7 @@
 const express = require("express");
 const bodyParser = require("body-parser");
 const mongoose = require("mongoose");
+var findOrCreate = require('mongoose-findorcreate')
 
 const app = express();
 
@@ -15,22 +16,55 @@ mongoose.connect("mongodb+srv://alinz:201121480@cluster0-q31x3.mongodb.net/chatD
     useFindAndModify: false
 });
 
-const userScheme = new mongoose.Schema({
+const userSchema = new mongoose.Schema({
     name: String,
     date: Date,
-    room: String
+    room: String,
+    lastActive: Date
 });
 
-const logScheme = new mongoose.Schema({
-    user: [userScheme],
+const logSchema = new mongoose.Schema({
+    user: [userSchema],
     text: String,
     date: Date,
     room: String
 });
 
-const User = new mongoose.model("User", userScheme);
+const roomSchema = new mongoose.Schema({
+    name: String,
+    password: String,
+    main: Boolean
+});
 
-const Log = new mongoose.model("Log", logScheme);
+roomSchema.plugin(findOrCreate);
+
+
+const User = new mongoose.model("User", userSchema);
+
+const Log = new mongoose.model("Log", logSchema);
+
+const Room = new mongoose.model("Room", roomSchema);
+
+
+// const lobby = new Room({
+//     name: "Lobby",
+//     password: "",
+//     main: true
+// });
+// lobby.save();
+// const sex = new Room({
+//     name: "Sex",
+//     password: "",
+//     main: true
+// });
+// sex.save();
+
+// const gaming = new Room({
+//     name: "Gaming",
+//     password: "",
+//     main: true
+// });
+// gaming.save();
 
 app.get("/", function (req, res) {
     res.sendFile(__dirname + "/index.html")
@@ -42,7 +76,8 @@ app.get("/login", function (req, res) {
     const newUser = new User({
         name: name,
         date: date,
-        room: "Lobby"
+        room: "Lobby",
+        lastActive: date
     });
     newUser.save(function (err, user) {
         res.send(user.id);
@@ -72,7 +107,7 @@ app.get("/getChatMsgs", function (req, res) {
 
     const date = new Date(req.query.date);
     const room = req.query.room;
-
+    var results = {};
 
     Log.find({
         date: {
@@ -80,15 +115,29 @@ app.get("/getChatMsgs", function (req, res) {
         },
         room: room
     }, function (err, foundLog) {
-
         if (foundLog) {
-            res.send(foundLog);
+            results.log = foundLog;
         }
+
+        Room.find({main: false}, function (err, foundRoom) {
+            results.room = foundRoom;
+            res.send(results);
+        });
     });
 });
 
 app.get("/onlineUsers", function (req, res) {
     const date = new Date();
+    const id = req.query.userId;
+
+    User.findOneAndUpdate({
+        _id: id
+    }, {
+        lastActive: date
+    },
+    function (err, results) {
+    });
+
     User.find({}, function (err, foundUser) {
         res.send(foundUser);
     });
@@ -97,18 +146,55 @@ app.get("/onlineUsers", function (req, res) {
 app.get("/changeRoom", function (req, res) {
     room = req.query.room;
     userId = req.query.userId;
-    User.findOneAndUpdate({
-        _id: userId
-    }, {room: room},
-    function (err, results) {
-        
+    password = req.query.password;
+
+    Room.findOne({
+        name: room
+    }, function (err, foundRoom) {
+
+        if (password == foundRoom.password) {
+
+            User.findOneAndUpdate({
+                    _id: userId
+                }, {
+                    room: room
+                },
+                function (err, results) {
+                    res.send("1");
+                });
+        } else {
+            res.send("0");
+        }
+
     });
+
 });
 
-// app.get("/newRoom", function(req,res) {
-//     const roomName = req.query.roomName;
+app.get("/createRoom", function (req, res) {
+    const room = req.query.room;
+    const password = req.query.password;
 
-// });
+    Room.findOrCreate({
+        name: room
+    }, function (err, foundRoom, create) {
+        if (create) {
+            Room.findOneAndUpdate({
+                name: room
+            }, {
+                $set: {
+                    password: password,
+                    main: false
+                }
+            }, {
+                new: true
+            }, function (err, doc) {
+                res.send(doc.name)
+            });
+        } else if (foundRoom) {
+            res.send("Lobby");
+        }
+    });
+});
 
 ///////////////////////   Delete old users
 
@@ -119,12 +205,16 @@ setInterval(function () {
 
         foundUser.forEach(function (user) {
 
-            if ((date - user.date) > 86400000) {
+            if ((date - user.lastActive) > 60000) {
                 user.remove();
             }
         });
 
     });
+
+    // Room.find({}, function(err, foundRoom) {
+    //     User.find({})
+    // });
 }, 10000);
 
 let port = process.env.PORT;
